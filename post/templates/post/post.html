@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+
+{% block content %}
+    {% for article in object_list %}
+        <div class="row">
+        <div class="col-lg-6 about-img">
+            <img src="{{article.image.url}}" alt="" width="620px" height="320px">
+        </div>
+
+        <div class="col-lg-6 content">
+            <h2>{{article.title}}</h2>
+            <p style="text-align: justify;">{{article.description|truncatewords:40}}</p>
+            <small>{{article.created}}</small><br>
+            <input type="submit" value="Read More..." class="btn btn-success p-2">
+        </div>
+        </div>
+        <hr>
+    {% endfor %}
+{% endblock %}
