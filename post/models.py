@@ -24,6 +24,11 @@ class Post(models.Model):
     status= models.CharField(max_length=1,choices=STATUS)
     objects = ManagerPost()
 
+    class Meta:
+        verbose_name = 'Post'
+        verbose_name_plural = 'Posts'
+        ordering = ['-created']
+
     def __str__(self):
         return self.title
 

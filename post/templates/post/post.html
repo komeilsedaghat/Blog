@@ -13,9 +13,22 @@
             <h2>{{article.title}}</h2>
             <p style="text-align: justify;">{{article.description|truncatewords:40}}</p>
             <small>{{article.created}}</small><br>
-            <input type="submit" value="Read More..." class="btn btn-success p-2">
+            <a href="{% url 'posts:detail' article.pk %}"> <input type="submit" value="Read More..." class="btn btn-success p-2"></a>
         </div>
         </div>
         <hr>
     {% endfor %}
+
+<div style="text-align: center;">
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a class="btn btn-info text-uppercase" href="{% url 'posts:post' page_obj.previous_page_number %}">Pre Page</a></span>
+        {% endif %}
+        {% if page_obj.has_next %}
+            <a class="btn btn-info text-uppercase" href="{% url 'posts:post' page_obj.next_page_number %}">Next Page </a></div>
+        {% endif %}
+    {% endif %}
+</div>
+  
+
 {% endblock %}
