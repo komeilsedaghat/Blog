@@ -1,0 +1,16 @@
+body {
+    background-color: aqua;
+}
+
+.login-title{
+    font-size: 60px;
+    padding: 30px;
+    
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.login-title {
+    color: #000;
+    background-color: #1cea8ced;
+    border-color: #badbcc;
+}

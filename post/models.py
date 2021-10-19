@@ -3,6 +3,24 @@ from django.utils.html import format_html
 from account.models import User
 
 
+#Manager for Category
+class ManageCategory(models.Manager):
+    def active_category(self):
+        return self.filter(status = True)
+
+
+#Category model
+class Category(models.Model):
+    name = models.CharField(max_length=20)
+    slug = models.SlugField(max_length=20)
+    status = models.BooleanField(default=True)
+    objects= ManageCategory()
+
+    def __str__(self):
+        return self.name
+
+
+
 #manager post model
 class ManagerPost(models.Manager):
     def active_post(self):
@@ -17,6 +35,7 @@ class Post(models.Model):
     )
     title = models.CharField(max_length=130)
     slug  = models.CharField(max_length=130)
+    category= models.ManyToManyField(Category,related_name='articles')
     description = models.TextField()
     author  = models.ForeignKey(User,on_delete=models.CASCADE)
     image = models.ImageField(upload_to = 'media')
@@ -34,8 +53,15 @@ class Post(models.Model):
 
     def image_show(self):
         return format_html("<img width=100 height = 84 style = 'border-radius:20px;' src='{}'> ".format(self.image.url))
+    image_show.short_description = "image"
 
 
     def description_shorter(self):
         des = self.description[:60] + '...'
         return des
+    description_shorter.short_description = "body"
+
+
+    def category_show(self):
+        return ",".join([category.name for category in self.category.active_category()])
+    category_show.short_description = "category"

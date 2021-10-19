@@ -1,10 +1,8 @@
 {% extends 'blog/base.html' %}
 {% load static %}
-{% load base_tags %}
 
-{% block navbar %} {% Navbar %} {% endblock %}
+
 {% block content %}
-    
     {% for article in object_list %}
         <div class="row">
         <div class="col-lg-6 about-img">
@@ -24,10 +22,10 @@
 <div style="text-align: center;">
     {% if is_paginated %}
         {% if page_obj.has_previous %}
-            <a class="btn btn-info text-uppercase" href="{% url 'posts:post' page_obj.previous_page_number %}">Pre Page</a></span>
+            <a class="btn btn-info text-uppercase" href="{% url 'posts:category' category.slug page_obj.previous_page_number %}">Pre Page</a></span>
         {% endif %}
         {% if page_obj.has_next %}
-            <a class="btn btn-info text-uppercase" href="{% url 'posts:post' page_obj.next_page_number %}">Next Page </a></div>
+            <a class="btn btn-info text-uppercase" href="{% url 'posts:category' category.slug page_obj.next_page_number %}">Next Page </a></div>
         {% endif %}
     {% endif %}
 </div>

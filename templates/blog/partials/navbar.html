@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+        <a class="navbar-brand">Web News</a>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="{% url 'posts:post' %}">Home</a>
+          </li>
+          
+          {% if request.user.is_authenticated %}
+          <li class="nav-item"><a class="nav-link" style="color: rgb(190, 9, 9);" href="{% url 'account:logout' %}">logout</a></li>
+          {% else %}
+          <li class="nav-item"><a class="nav-link" style="color: rgb(128, 196, 20);" href="{% url 'account:login' %}">Login</a></li>
+          <li class="nav-item"><a class="nav-link" style="color: rgb(128, 196, 20);" href="{% url 'account:register' %}">register</a></li>
+          {% endif %}
+
+          {% for cat in category %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'posts:category' cat.slug %}">{{cat.name}}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </nav>

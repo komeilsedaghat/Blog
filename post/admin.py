@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Post
+from .models import Post,Category
 
 
 #actions
@@ -24,9 +24,17 @@ def Do_draft(modeladmin,request,queryset):
 Do_draft.short_description = "Draft article(s)"
 
 
+#Category Admin Panel
+class AdminCategory(admin.ModelAdmin):
+    list_display = ('name','status')
+    prepopulated_fields = {'slug':('name',)}
+    list_editable = ('status',)
+
+admin.site.register(Category,AdminCategory)
+
 #Post Admin Panel
 class AdminPost(admin.ModelAdmin):
-    list_display = ('title','description_shorter','image_show','author','created','status')
+    list_display = ('title','description_shorter','image_show','category_show','author','created','status')
     list_filter  = ('created','status','author')
     search_fields= ('title','description',)
     prepopulated_fields = {'slug':('title',)}
@@ -34,3 +42,4 @@ class AdminPost(admin.ModelAdmin):
     actions = (Do_publish,Do_draft,)
 
 admin.site.register(Post,AdminPost)
+
