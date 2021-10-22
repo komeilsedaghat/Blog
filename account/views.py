@@ -14,8 +14,10 @@ from .froms import (
 
 #login view
 def Login_User(request):
+
     if request.method == "POST":
         form = LoginForm(request.POST)
+
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -37,10 +39,9 @@ def Register_User(request):
         form = RegisterForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
-            user = User.objects.create_user(cd['username'],cd['email'],cd['password'])
-            login(request,user)
+            User.objects.create_user(cd['username'],cd['email'],cd['password'])
             messages.success(request,"You registred successfully")
-            return redirect('posts:post')
+            return redirect('account:login')
     else:
         form = RegisterForm()
     return render(request,'account/register.html',{'form':form})

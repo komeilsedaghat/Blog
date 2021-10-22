@@ -1,5 +1,4 @@
 {% load static %}
-{% load base_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,7 +40,7 @@
   ============================-->
   <header id="header">
       </div>
-      {% block navbar %}{% Navbar %}{% endblock %}
+      {% include 'blog/partials/navbar.html' %}
     </div>
   </header><!-- #header -->
 

@@ -2,7 +2,6 @@
 {% load static %}
 {% load base_tags %}
 
-{% block navbar %} {% Navbar %} {% endblock %}
 {% block content %}
     
     {% for article in object_list %}
@@ -14,7 +13,7 @@
         <div class="col-lg-6 content">
             <h2>{{article.title}}</h2>
             <p style="text-align: justify;">{{article.description|truncatewords:40}}</p>
-            <small>{{article.created}}</small><br>
+            <small>Written by {{article.author.get_full_name}} in {{article.created}}</small>
             <a href="{% url 'posts:detail' article.pk %}"> <input type="submit" value="Read More..." class="btn btn-success p-2"></a>
         </div>
         </div>
