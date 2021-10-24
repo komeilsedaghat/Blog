@@ -1,10 +1,15 @@
 from django import forms
+from .models import User
+from django.http import request
 from django.contrib import auth
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login ,logout
 from django.shortcuts import redirect, render
+from django.views.generic import ListView
 from django.contrib.auth import login
 from django.contrib import messages
-from .models import User
+from .mixins import AccessMixin
+from post.models import Post
 from .froms import (
     LoginForm,
     RegisterForm,
@@ -25,7 +30,10 @@ def Login_User(request):
             if user is not None:
                 login(request,user)
                 messages.success(request,'You Logined Successfully!')
-                return redirect('posts:post')
+                if request.user.is_superuser:
+                    return redirect('account:home')
+                else:
+                    return redirect('posts:post')
             else:
                 messages.error(request,'Your password or username is wrong!')
     else:
@@ -52,3 +60,11 @@ def Logout_User(request):
     logout(request)
     messages.success(request,'You logouted successfully!')
     return redirect('posts:post')
+
+
+#ADMIN PANEL VIEWS
+class HomeAdminView(LoginRequiredMixin,AccessMixin,ListView):
+    template_name = 'admin-panel/home.html'
+
+    def get_queryset(self):
+        return Post.objects.all()
