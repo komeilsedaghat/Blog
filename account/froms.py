@@ -14,7 +14,9 @@ class RegisterForm(forms.Form):
     username = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'class':'input100','placeholder':'Your Username'}))
     email    = forms.EmailField(max_length=40,widget=forms.EmailInput(attrs={'class':'input100','placeholder':'Your Email'}))
     password = forms.CharField(max_length=50,widget=forms.PasswordInput(attrs={'class':'input100','placeholder':'Your Password'}))
-   
+    first_name = forms.CharField(max_length=20,widget=forms.TextInput(attrs={'class':'input100','placeholder':'Your first name'}))
+    last_name = forms.CharField(max_length=20,widget=forms.TextInput(attrs={'class':'input100','placeholder':'Your last name'}))
+
 
     def clean_email(self):
         email = self.cleaned_data['email']

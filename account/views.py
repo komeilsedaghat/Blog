@@ -1,10 +1,12 @@
 from django import forms
 from django.db.models import fields
+from django.views.generic.base import TemplateView
 from .models import User
 from django.http import request
 from django.urls import reverse_lazy
 from django.contrib import auth
 from django.contrib.auth.mixins import (LoginRequiredMixin)
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import authenticate, login ,logout
 from django.shortcuts import redirect, render
 from django.contrib.auth import login
@@ -12,6 +14,7 @@ from django.contrib import messages
 from .mixins import (
     AccessMixin,
     FormValidSaveMixin,
+    SuperUserAccessMixin,
     StatusAuthorAccessMixin,
     SuperUserAuthorAccessMixin,
 )
@@ -43,10 +46,7 @@ def Login_User(request):
             if user is not None:
                 login(request,user)
                 messages.success(request,'You Logined Successfully!')
-                if request.user.is_superuser or request.user.is_author:
-                    return redirect('account:home')
-                else:
-                    return redirect('posts:post')
+                return redirect('posts:post')
             else:
                 messages.error(request,'Your password or username is wrong!')
     else:
@@ -59,8 +59,13 @@ def Register_User(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
-            cd = form.cleaned_data
-            User.objects.create_user(cd['username'],cd['email'],cd['password'])
+            username = form.cleaned_data['username']
+            email    = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            first_name = form.cleaned_data['first_name']
+            last_name  = form.cleaned_data['last_name']
+
+            User.objects.create_user(username = username,email=email,password=password,first_name=first_name,last_name=last_name)
             messages.success(request,"You registred successfully")
             return redirect('account:login')
     else:
@@ -76,12 +81,12 @@ def Logout_User(request):
 
 
 #Profile users
-class ProfileAdminView(UpdateView):
+class ProfileAdminView(SuccessMessageMixin,UpdateView):
     model = User
     template_name = "admin-panel/profile.html"
     form_class = ProfileForm
     success_url = reverse_lazy('account:profile')
-
+    success_message = "Your profile successfully Changed"
     def get_object(self):
         return User.objects.get(pk = self.request.user.pk)
 
@@ -115,3 +120,13 @@ class DeleteArticleAdminView(SuperUserAuthorAccessMixin,DeleteView):
     template_name = 'admin-panel/confrim_delete.html'
 
 
+#Users class
+class UsersNumberAdminView(LoginRequiredMixin,SuperUserAccessMixin,ListView):
+    queryset = User.objects.all()
+    template_name = 'admin-panel/user-number.html'
+    
+    def get_context_data(self,**kwargs):
+        len_us = User.objects.all()
+        context = super().get_context_data(**kwargs)
+        context['len'] = len(len_us)
+        return context

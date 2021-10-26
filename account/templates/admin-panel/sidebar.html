@@ -19,10 +19,17 @@
                     Add Article
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
-                <a class="nav-link collapsed" href="#" >
+                <a class="nav-link collapsed" href="{% url 'account:profile' %}" >
                     <div class="sb-nav-link-icon"><i class="fas fa-image"></i></div>
                     Profile
                     <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
+                {% if request.user.is_superuser %}
+                <a class="nav-link collapsed" href="{% url 'account:users' %}" >
+                    <div class="sb-nav-link-icon"><i class="fas fa-image"></i></div>
+                    All User
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                {% endif %}
         </nav>
     </div>

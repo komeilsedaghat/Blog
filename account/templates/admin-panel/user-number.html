@@ -1,0 +1,48 @@
+{% extends 'admin-panel/base.html' %}
+
+{% block name %}
+    All Users
+{% endblock %}
+<!-- {% for user in object_list %}
+    {{user.first_name}}
+{% endfor %} -->
+{% block title %}Users|web news{% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+      <div class="card">
+        <!-- /.card-header -->
+          <table class="table table-head-fixed">
+            <thead>
+            <div class="card-body">
+              <tr>
+                <th>nymber user</th>
+                <th>first name</th>
+                <th>last name</th>
+                <th>email</th>
+                <th>user is athor?</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for user in object_list %}
+                    <tr>
+                        <td> {{user.pk}} </td>
+                        <td>{{user.first_name}}</td>
+                        <td>{{user.last_name}} </td>
+                        <td>{{user.email}} </td>
+                        <td> {{user.is_author}} </td>
+                    </tr>
+                {% endfor %}
+            </div>
+            </tbody>
+          </table>
+          <div class="badge bg-success fs-2">All User in site:{{len}}</div>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
+  </div>
+{% endblock %}
