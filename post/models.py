@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.html import format_html
+from django.urls import reverse
 from account.models import User
 
 
@@ -48,7 +49,7 @@ class Post(models.Model):
         verbose_name_plural = 'Posts'
         ordering = ['-created']
 
-    def __str__(self):
+    def __str__(self): 
         return self.title
 
     def image_show(self):
@@ -65,3 +66,6 @@ class Post(models.Model):
     def category_show(self):
         return ",".join([category.name for category in self.category.active_category()])
     category_show.short_description = "category"
+
+    def get_absolute_url(self):
+        return reverse('account:home')

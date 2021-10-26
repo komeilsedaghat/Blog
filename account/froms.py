@@ -1,4 +1,5 @@
 from django import forms
+from django.forms import fields
 from django.forms.forms import Form
 from .models import User
 
@@ -22,3 +23,21 @@ class RegisterForm(forms.Form):
             raise forms.ValidationError("this email is already exists")
         else:
             return email
+
+
+#ProfileForm
+class ProfileForm(forms.ModelForm):
+    def __init__(self,*args,**kwargs):
+        super(ProfileForm,self).__init__(*args,**kwargs)
+
+        self.fields['username'].disabled = True
+        self.fields['username'].help_text = None
+        self.fields['email'].disabled = True
+        self.fields['is_author'].disabled = True
+
+    class Meta:
+        model = User
+        fields = [
+            'username','email','first_name',
+            'last_name','is_author',
+        ]

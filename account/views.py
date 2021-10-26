@@ -1,17 +1,30 @@
 from django import forms
+from django.db.models import fields
 from .models import User
 from django.http import request
+from django.urls import reverse_lazy
 from django.contrib import auth
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin)
 from django.contrib.auth import authenticate, login ,logout
 from django.shortcuts import redirect, render
-from django.views.generic import ListView
 from django.contrib.auth import login
 from django.contrib import messages
-from .mixins import AccessMixin
+from .mixins import (
+    AccessMixin,
+    FormValidSaveMixin,
+    StatusAuthorAccessMixin,
+    SuperUserAuthorAccessMixin,
+)
 from post.models import Post
+from django.views.generic import( 
+    ListView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+)
 from .froms import (
     LoginForm,
+    ProfileForm,
     RegisterForm,
 )
 
@@ -30,7 +43,7 @@ def Login_User(request):
             if user is not None:
                 login(request,user)
                 messages.success(request,'You Logined Successfully!')
-                if request.user.is_superuser:
+                if request.user.is_superuser or request.user.is_author:
                     return redirect('account:home')
                 else:
                     return redirect('posts:post')
@@ -62,9 +75,43 @@ def Logout_User(request):
     return redirect('posts:post')
 
 
+#Profile users
+class ProfileAdminView(UpdateView):
+    model = User
+    template_name = "admin-panel/profile.html"
+    form_class = ProfileForm
+    success_url = reverse_lazy('account:profile')
+
+    def get_object(self):
+        return User.objects.get(pk = self.request.user.pk)
+
+
 #ADMIN PANEL VIEWS
+#Home
 class HomeAdminView(LoginRequiredMixin,AccessMixin,ListView):
     template_name = 'admin-panel/home.html'
-
     def get_queryset(self):
         return Post.objects.all()
+
+
+#Add Article
+class CreateArticleAdminView(LoginRequiredMixin,FormValidSaveMixin,StatusAuthorAccessMixin,AccessMixin,CreateView):
+    model = Post
+    fields= ["author","title","slug","category","description","image","status"]
+    template_name = 'admin-panel/create_update.html'
+
+    
+#Update Article
+class UpdateArticleAdminView(FormValidSaveMixin,StatusAuthorAccessMixin,AccessMixin,UpdateView):
+    model = Post
+    fields= ["author","title","slug","category","description","image","status"]
+    template_name = 'admin-panel/create_update.html'
+  
+
+#Delete Article
+class DeleteArticleAdminView(SuperUserAuthorAccessMixin,DeleteView):
+    model = Post
+    success_url = reverse_lazy('account:home')
+    template_name = 'admin-panel/confrim_delete.html'
+
+

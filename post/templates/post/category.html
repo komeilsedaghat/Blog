@@ -1,6 +1,7 @@
 {% extends 'blog/base.html' %}
 {% load static %}
 
+{% block title %}Web News|{{category.name}}{% endblock %}
 
 {% block content %}
     {% for article in object_list %}

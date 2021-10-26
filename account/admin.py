@@ -13,12 +13,7 @@ UserAdmin.fieldsets[2][1]['fields'] = (
 )
 
 
-UserAdmin.list_display = (
-                    'username',
-                    'email',
-                    'first_name',
-                    'last_name',
-                    'is_staff',
+UserAdmin.list_display += (
                     'is_author',
 )
 

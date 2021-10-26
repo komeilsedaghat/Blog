@@ -1,1 +1,59 @@
 {% extends 'admin-panel/base.html' %}
+
+
+{% block name %}List Article{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+      <div class="card">
+        <!-- /.card-header -->
+          <table class="table table-head-fixed">
+            <thead>
+            <div class="card-body">
+              <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Category</th>
+                <th>Author</th>
+                <th>Time</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for article in object_list %}
+                <tr>
+                    <td>
+                        <a style="text-decoration: none; color: rgb(59, 77, 238);" href="{% url 'account:update_article' article.pk %}">
+                            {{article.title|truncatewords:6}}
+                        </a>
+                    </td>
+                    </a>
+                    <td>{{article.description|truncatewords:20}}</td>
+                    <td>{{article.image_show}}</td>
+                    <td><span class="tag tag-success">{{article.category_show}}</span></td>
+                    <td>{{article.author}}</td>
+                    <td>{{article.created|truncatechars:20}}</td>
+                    <td>
+                        {% if article.status == 'p' %}
+                            <p class="badge bg-success">Published</p>
+                            <a href="{% url 'posts:detail' article.pk %}" ><p class="badge bg-info text-dark ">show article</p></a>
+                        {% else %}
+                            <p class="badge bg-danger">
+                                Drafted
+                            </p>                                            
+                        {% endif %}
+                    </td>
+                </tr>
+              {% endfor %}
+            </div>
+            </tbody>
+          </table>
+        </div>
+        <!-- /.card-body -->
+      </div>
+      <!-- /.card -->
+    </div>
+  </div>
+{% endblock %}
