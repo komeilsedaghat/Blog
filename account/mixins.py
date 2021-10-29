@@ -51,3 +51,4 @@ class SuperUserAccessMixin():
             return super().dispatch(request,*args,**kwargs)
         else:
             raise Http404("You can't see this page")
+        

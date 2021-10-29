@@ -5,6 +5,7 @@ from .views import (
     Register_User,
     HomeAdminView,
     ProfileAdminView,
+    del_user,
     UsersNumberAdminView,
     CreateArticleAdminView,
     UpdateArticleAdminView,
@@ -21,6 +22,8 @@ urlpatterns = [
     path('admin-panel/create/',CreateArticleAdminView.as_view(),name='create_article'),
     path('admin-panel/update/<int:pk>',UpdateArticleAdminView.as_view(),name='update_article'),
     path('admin-panel/delete/<int:pk>',DeleteArticleAdminView.as_view(),name='delete_article'),
-    path('admin-panel/users',UsersNumberAdminView.as_view(),name='users')
+    path('admin-panel/users',UsersNumberAdminView.as_view(),name='users'),
+    path('admin-panel/delete-user/<slug:username>',del_user,name='delete-user'),
+    
 
 ]

@@ -3,9 +3,8 @@
 {% block name %}
     All Users
 {% endblock %}
-<!-- {% for user in object_list %}
-    {{user.first_name}}
-{% endfor %} -->
+
+
 {% block title %}Users|web news{% endblock %}
 
 
@@ -32,7 +31,15 @@
                         <td>{{user.first_name}}</td>
                         <td>{{user.last_name}} </td>
                         <td>{{user.email}} </td>
-                        <td> {{user.is_author}} </td>
+                        <td> 
+                          {% if user.is_author == True %}
+                            <i class="fas fa-check"></i>
+                          {% else %}
+                            <i class="fas fa-times"></i>
+                          {% endif %}
+                          <a href="{% url 'account:delete-user' user.username %}">Delete user</a>
+
+                        </td>
                     </tr>
                 {% endfor %}
             </div>

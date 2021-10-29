@@ -1,0 +1,18 @@
+{% extends 'admin-panel/base.html' %}
+
+{% block title %} Delete User {% endblock %}
+
+{% block name %}Confrim Delete User{% endblock %}
+
+
+{% block content %}
+
+    <form target="." method="POST">
+        {% csrf_token %}
+        <div class="col-8 text-center">
+            <p class="alert alert-secondary text-dark"> Are you sure you want delete "{{request.user}}"?</p>
+            <input class="btn btn-warning" type="submit" value="Delete">
+        </div>
+    </form>
+
+{% endblock %}

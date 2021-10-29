@@ -10,6 +10,7 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import authenticate, login ,logout
 from django.shortcuts import redirect, render
 from django.contrib.auth import login
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from .mixins import (
     AccessMixin,
@@ -117,16 +118,29 @@ class UpdateArticleAdminView(FormValidSaveMixin,StatusAuthorAccessMixin,AccessMi
 class DeleteArticleAdminView(SuperUserAuthorAccessMixin,DeleteView):
     model = Post
     success_url = reverse_lazy('account:home')
-    template_name = 'admin-panel/confrim_delete.html'
+    template_name = 'admin-panel/confrim_delete_article.html'
 
 
-#Users class
+#Users Number
 class UsersNumberAdminView(LoginRequiredMixin,SuperUserAccessMixin,ListView):
     queryset = User.objects.all()
-    template_name = 'admin-panel/user-number.html'
+    template_name = 'admin-panel/user.html'
     
     def get_context_data(self,**kwargs):
         len_us = User.objects.all()
         context = super().get_context_data(**kwargs)
         context['len'] = len(len_us)
         return context
+        
+        
+#Delete User
+@staff_member_required
+def del_user(request,username):    
+    try:
+        u = User.objects.get(username=username)
+        u.delete()
+        messages.sucess(request, "The user is deleted")
+        return redirect('account:home')
+    except:
+      messages.error(request, "The user not found")    
+    return render(request, "admin-panel/user.html")
