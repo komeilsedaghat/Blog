@@ -40,7 +40,10 @@
                             <p class="badge bg-success">Published</p>
                             <a href="{% url 'posts:detail' article.pk %}" ><p class="badge bg-info text-dark ">show article</p></a>
                         {% else %}
-                            <p class="badge bg-warning">Drafted</p> 
+                            <p class="badge bg-warning">Drafted</p> <br>
+                            <a href="{% url 'account:preview' article.pk %}">
+                              <p class="badge bg-info">Preview</p>
+                            </a>
                         {% endif %}
                         <p class="badge bg-danger"> <a style="text-decoration: none; color: rgb(255, 255, 255);" href="{% url 'account:delete_article' article.pk %}">Delete Article</a></p>                                           
                     </td>

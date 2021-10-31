@@ -34,6 +34,9 @@
                 <div class="col-6">
                     {{form.is_author|as_crispy_field}}
                 </div>
+                <div class="col-6 p-1">
+                    Change <a style="text-decoration: none;" href="{% url 'account:password_change' %}">Password</a> 
+                </div>
             </div>
             <br>
             <button style="text-align: center;" class="btn btn-success">Change Profile </button>

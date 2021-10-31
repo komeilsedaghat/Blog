@@ -1,6 +1,7 @@
 from django import forms
 from django.db.models import fields
 from django.views.generic.base import TemplateView
+from django.views.generic.detail import DetailView
 from .models import User
 from django.http import request
 from django.urls import reverse_lazy
@@ -8,10 +9,11 @@ from django.contrib import auth
 from django.contrib.auth.mixins import (LoginRequiredMixin)
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import authenticate, login ,logout
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import login
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
+from django.contrib.auth.views import PasswordChangeView,PasswordChangeDoneView
 from .mixins import (
     AccessMixin,
     FormValidSaveMixin,
@@ -23,6 +25,7 @@ from post.models import Post
 from django.views.generic import( 
     ListView,
     CreateView,
+    DetailView,
     UpdateView,
     DeleteView,
 )
@@ -103,14 +106,14 @@ class HomeAdminView(LoginRequiredMixin,AccessMixin,ListView):
 #Add Article
 class CreateArticleAdminView(LoginRequiredMixin,FormValidSaveMixin,StatusAuthorAccessMixin,AccessMixin,CreateView):
     model = Post
-    fields= ["author","title","slug","category","description","image","status"]
+    fields= ["author","title","slug","category","description","image","status","is_special_article"]
     template_name = 'admin-panel/create_update.html'
 
     
 #Update Article
 class UpdateArticleAdminView(FormValidSaveMixin,StatusAuthorAccessMixin,AccessMixin,UpdateView):
     model = Post
-    fields= ["author","title","slug","category","description","image","status"]
+    fields= ["author","title","slug","category","description","image","status","is_special_article"]
     template_name = 'admin-panel/create_update.html'
   
 
@@ -131,8 +134,16 @@ class UsersNumberAdminView(LoginRequiredMixin,SuperUserAccessMixin,ListView):
         context = super().get_context_data(**kwargs)
         context['len'] = len(len_us)
         return context
-        
-        
+
+
+
+class PreviewAdminView(LoginRequiredMixin,DetailView):
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(Post,pk = pk)
+    template_name = "post/detail.html"
+
+
 #Delete User
 @staff_member_required
 def del_user(request,username):    
@@ -144,3 +155,12 @@ def del_user(request,username):
     except:
       messages.error(request, "The user not found")    
     return render(request, "admin-panel/user.html")
+
+
+class PasswordChange(PasswordChangeView):
+    template_name = "account/password_change_form.html"
+    success_url = reverse_lazy("account:password_change_done")
+
+
+class PasswordChangeDone(PasswordChangeDoneView):
+    template_name = "account/password_change_done.html"

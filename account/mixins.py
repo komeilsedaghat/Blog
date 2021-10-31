@@ -7,12 +7,12 @@ class StatusAuthorAccessMixin():
         if request.user.is_superuser:
             self.fields = [
                 "author","title","slug","category",
-                "description","image","status",
+                "description","image","status","is_special_article",
             ]
         elif request.user.is_author:
             self.fields = [
                 "title","slug","category",
-                "description","image",             
+                "description","image","is_special_article",             
             ]
         else:
             raise Http404("Sory,You can't see this page")

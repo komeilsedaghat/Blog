@@ -42,6 +42,7 @@ class Post(models.Model):
     image = models.ImageField(upload_to = 'media')
     created = models.DateTimeField(auto_now_add=True)
     status= models.CharField(max_length=1,choices=STATUS)
+    is_special_article = models.BooleanField(default=False)
     objects = ManagerPost()
 
     class Meta:

@@ -14,6 +14,9 @@
             <h2>{{article.title}}</h2>
             <p style="text-align: justify;">{{article.description|truncatewords:40}}</p>
             <small>{{article.created}}</small><br>
+            {% if article.is_special_article %}
+                <p class="badge bg-danger p-1 text-white bg-opacity-50">Special Article</p>
+            {% endif %}
             <a href="{% url 'posts:detail' article.pk %}"> <input type="submit" value="Read More..." class="btn btn-success p-2"></a>
         </div>
         </div>
