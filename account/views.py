@@ -1,4 +1,3 @@
-from django import forms
 from django.db.models import fields
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
@@ -11,9 +10,10 @@ from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth import authenticate, login ,logout
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import login
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
-from django.contrib.auth.views import PasswordChangeView,PasswordChangeDoneView
+from django.contrib.auth.views import PasswordChangeView
 from .mixins import (
     AccessMixin,
     FormValidSaveMixin,
@@ -85,7 +85,7 @@ def Logout_User(request):
 
 
 #Profile users
-class ProfileAdminView(SuccessMessageMixin,UpdateView):
+class ProfileAdminView(LoginRequiredMixin,SuccessMessageMixin,UpdateView):
     model = User
     template_name = "admin-panel/profile.html"
     form_class = ProfileForm
@@ -93,7 +93,7 @@ class ProfileAdminView(SuccessMessageMixin,UpdateView):
     success_message = "Your profile successfully Changed"
     def get_object(self):
         return User.objects.get(pk = self.request.user.pk)
-
+    
 
 #ADMIN PANEL VIEWS
 #Home
@@ -159,8 +159,6 @@ def del_user(request,username):
 
 class PasswordChange(PasswordChangeView):
     template_name = "account/password_change_form.html"
-    success_url = reverse_lazy("account:password_change_done")
+    success_url = reverse_lazy("password_change_done")
 
 
-class PasswordChangeDone(PasswordChangeDoneView):
-    template_name = "account/password_change_done.html"
