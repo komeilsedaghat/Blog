@@ -25,7 +25,7 @@
 				<form class="login100-form validate-form flex-sb flex-w" method="POST">
                     {% csrf_token %}
                     <div style="text-align: center; padding: 20px;">
-                    {% include 'blog/partials/messages.html' %}
+						{% include 'blog/partials/messages.html' %}
                     </div>
 					<span class="login100-form-title p-b-51">
 						Login
@@ -34,6 +34,7 @@
 					
 					<div class="wrap-input100 validate-input m-b-16" data-validate = "Username is required">
                         {{form.username}}
+						{{form.error}}
                         <span class="focus-input100"></span>
 					</div>
 					

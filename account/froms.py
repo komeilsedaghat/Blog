@@ -2,20 +2,40 @@ from django import forms
 from django.forms import fields
 from django.forms.forms import Form
 from .models import User
+from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 
-#Login Form
-class LoginForm(forms.Form):
-    username = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'class':'input100','placeholder':'Your Username'}))
-    password = forms.CharField(max_length=50,widget=forms.PasswordInput(attrs={'class':'input100','placeholder':'Your Password'}))
 
+class LoginUserForm(AuthenticationForm):
+    class Meta:
+        model = User
+        fields= ('username','password',)
+
+    def __init__(self,*args,**kwargs):
+        super(LoginUserForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs = {'class':'input100','placeholder':'Your Username'}
+        self.fields['password'].widget.attrs = {'class':'input100','placeholder':'Your Password'}
+
+
+    
 
 #Register Form
-class RegisterForm(forms.Form):
-    username = forms.CharField(max_length=30,widget=forms.TextInput(attrs={'class':'input100','placeholder':'Your Username'}))
-    email    = forms.EmailField(max_length=40,widget=forms.EmailInput(attrs={'class':'input100','placeholder':'Your Email'}))
-    password = forms.CharField(max_length=50,widget=forms.PasswordInput(attrs={'class':'input100','placeholder':'Your Password'}))
-    first_name = forms.CharField(max_length=20,widget=forms.TextInput(attrs={'class':'input100','placeholder':'Your first name'}))
-    last_name = forms.CharField(max_length=20,widget=forms.TextInput(attrs={'class':'input100','placeholder':'Your last name'}))
+class RegisterUserForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields= ('username','email','password1','password2','first_name','last_name')
+
+
+    def __init__(self,*args,**kwargs):
+        super(RegisterUserForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs = {'class':'input100','placeholder':'Your username'}
+        self.fields['email'].widget.attrs = {'class':'input100','placeholder':'Your email'}
+        self.fields['password1'].widget.attrs = {'class':'input100','placeholder':'Your Password'}
+        self.fields['password2'].widget.attrs = {'class':'input100','placeholder':'Your Confirm Password'}
+        self.fields['first_name'].widget.attrs = {'class':'input100','placeholder':'Your firstname'}
+        self.fields['last_name'].widget.attrs = {'class':'input100','placeholder':'Your lastname'}
+
+
+    
 
 
     def clean_email(self):

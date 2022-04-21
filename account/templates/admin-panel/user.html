@@ -17,7 +17,6 @@
             <thead>
             <div class="card-body">
               <tr>
-                <th>nymber user</th>
                 <th>first name</th>
                 <th>last name</th>
                 <th>email</th>
@@ -27,7 +26,6 @@
             <tbody>
                 {% for user in object_list %}
                     <tr>
-                        <td> {{user.pk}} </td>
                         <td>{{user.first_name}}</td>
                         <td>{{user.last_name}} </td>
                         <td>{{user.email}} </td>
@@ -37,15 +35,16 @@
                           {% else %}
                             <i class="fas fa-times"></i>
                           {% endif %}
-                          <a href="{% url 'account:delete-user' user.username %}">Delete user</a>
-
+                          <form method="POST" action="{% url 'account:delete_user' user.username   %}">
+                            {% csrf_token %}<input class="btn btn-danger" type="submit" value="DELETE">
+                         </form>
                         </td>
                     </tr>
                 {% endfor %}
             </div>
             </tbody>
           </table>
-          <div class="badge bg-success fs-2">All User in site:{{len}}</div>
+          <div class="badge bg-success fs-2">All User in site:{{len_users}}</div>
         </div>
         <!-- /.card-body -->
       </div>

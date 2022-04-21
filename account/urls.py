@@ -1,34 +1,19 @@
 from django.urls import path
 from django.contrib.auth import views
-from .views import (
-    Login_User,
-    Logout_User,
-    Register_User,
-    del_user,
-    HomeAdminView,
-    ProfileAdminView,
-    PreviewAdminView,
-    UsersNumberAdminView,
-    CreateArticleAdminView,
-    UpdateArticleAdminView,
-    DeleteArticleAdminView,
-)
 
-app_name = 'account'
+from . import views
+
+app_name ='account'
 urlpatterns = [
-    path('login/',Login_User,name='login'),
-    path('register/',Register_User,name='register'),
-    path('logout/',Logout_User,name='logout'),
-    path('profile/',ProfileAdminView.as_view(),name='profile'),
-    path('admin-panel/',HomeAdminView.as_view(),name='home'),
-    path('admin-panel/create/',CreateArticleAdminView.as_view(),name='create_article'),
-    path('admin-panel/update/<int:pk>',UpdateArticleAdminView.as_view(),name='update_article'),
-    path('admin-panel/delete/<int:pk>',DeleteArticleAdminView.as_view(),name='delete_article'),
-    path('admin-panel/users',UsersNumberAdminView.as_view(),name='users'),
-    path('admin-panel/delete-user/<slug:username>',del_user,name='delete-user'),
-    path('admin-panel/preview/<int:pk>/',PreviewAdminView.as_view(),name='preview'),
-
-
-    
-
+    path('login/',views.LoginUserView.as_view(),name='login'),
+    path('register/',views.RegisterUserView.as_view(),name='register'),
+    path('logout/',views.LogoutUserView.as_view(),name='logout'),
+    path('profile/',views.ProfileAdminView.as_view(),name='profile'),
+    path('admin-panel/',views.HomeAdminView.as_view(),name='home'),
+    path('admin-panel/create/',views.CreateArticleAdminView.as_view(),name='create_article'),
+    path('admin-panel/update/<int:pk>',views.UpdateArticleAdminView.as_view(),name='update_article'),
+    path('admin-panel/delete/<int:pk>',views.DeleteArticleAdminView.as_view(),name='delete_article'),
+    path('admin-panel/users/',views.UsersNumberAdminView.as_view(),name='users'),
+    path('admin-panel/users/delete/<str:username>/',views.DeleteUserView.as_view(),name='delete_user'),
+    path('admin-panel/preview/<int:pk>/',views.PreviewAdminView.as_view(),name='preview'),
 ]
